@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de plantillas</title>
+    <link rel="stylesheet" href="css/Kommo.css">
+</head>
+<body>
+  <div class="main-container">
+    <!-- Header con logo y botón -->
+    <div class="header-section">
+      <div class="logo-container">
+        <img src="css/maplascali.jpg" alt="MAPLASCALI SAS" class="logo">
+      </div>
+      <div class="search-container">
+        <input type="text" id="buscarPlantilla" class="search-input" placeholder="🔍 Buscar plantilla..." onkeyup="buscarPlantilla()">
+      </div>
+      <div class="button-container">
+        <button class="btn btn-crear" onclick="mostrarFormulario()">Crear plantilla</button>
+      </div>
+    </div>
+
+    <!-- Tabla con scroll -->
+    <div class="table-wrapper">
+      <div class="table-container">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>nombre de la plantilla</th>
+              <th>contenido</th>
+              <th>audio</th>
+              <th>editar/eliminar</th>
+            </tr>
+          </thead>
+          <tbody id="tablaPlantillas">
+            <!-- Las plantillas se mostrarán aquí -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination-container">
+      <button class="btn-pagination" id="btnAnterior" onclick="cambiarPagina(-1)">← Anterior</button>
+      <span id="infoPagina" class="page-info">Página 1</span>
+      <button class="btn-pagination" id="btnSiguiente" onclick="cambiarPagina(1)">Siguiente →</button>
+    </div>
+  </div>
+  
+  <!-- Formulario -->
+  <div class="form-container" id="formulario" style="display: none;">
+    <form onsubmit="guardarPlantilla(event)">
+      <div class="mb-3">
+        <label class="form-label">Nombre de la plantilla</label>
+        <input type="text" class="form-control" id="nombrePlantilla" required>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">Contenido</label>
+        <textarea class="form-control" id="contenido" rows="4" required></textarea>
+      </div>
+      
+      <div class="mb-4">
+        <label class="form-label">Audio (solo MP3)</label>
+        <input type="file" class="form-control audio-input" id="audio" accept=".mp3,.wav,.ogg,audio/mpeg,audio/wav,audio/ogg" onchange="validarAudio(this)">
+        <small class="text-muted">Solo se aceptan archivos MP3, WAV u OGG</small>
+      </div>
+      
+      <button type="submit" class="btn btn-guardar">Guardar</button>
+      <button type="button" class="btn btn-cancelar" onclick="cerrarFormulario()">Cancelar</button>
+    </form>
+  </div>
+
+  <!-- Reproductor de audio como overlay -->
+  <div id="audioModal" style="display: none;" onclick="cerrarSiClickFueraAudio(event)">
+    <div id="audioContent" onclick="event.stopPropagation()">
+      <h5 class="audio-title">Reproducir Audio</h5>
+      <audio id="audioPlayer" controls class="audio-player">
+        Tu navegador no soporta el elemento de audio.
+      </audio>
+      <div class="audio-buttons">
+        <button type="button" class="btn-pausar-audio" onclick="pausarAudio()">⏸ Pausar</button>
+        <button type="button" class="btn-reanudar-audio" onclick="reanudarAudio()">▶ Reanudar</button>
+        <button type="button" class="btn-detener-audio" onclick="detenerAudio()">⏹ Detener</button>
+      </div>
+      <button type="button" class="btn-cerrar-audio" onclick="cerrarAudio()">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <script src="js/Kommo.js"></script>
+</body>
+</html>

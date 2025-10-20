@@ -1,0 +1,717 @@
+/* Importar fuente bonita de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* Variables de colores */
+:root {
+    --primary-blue: #2563eb;
+    --primary-orange: #f97316;
+}
+
+/* Estilos generales */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    background: linear-gradient(135deg, #f97316 0%, #2563eb 100%);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal */
+.main-container {
+    max-width: 95%;
+    width: 100%;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Header con logo y botón */
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-shrink: 0;
+    gap: 20px;
+}
+
+.logo-container {
+    flex: 0 0 auto;
+}
+
+.logo {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+}
+
+.button-container {
+    flex: 0 0 auto;
+}
+
+/* Contenedor del buscador */
+.search-container {
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+/* Botón crear plantilla */
+.btn-crear {
+    background-color: var(--primary-orange);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-crear:hover {
+    background-color: #ea580c;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(249, 115, 22, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Wrapper para scroll */
+.table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+/* Scrollbar personalizada */
+.table-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #1d4ed8;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+
+/* Estilos de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+table th {
+    padding: 18px 15px;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+    text-align: left;
+    font-size: 15px;
+}
+
+table td {
+    padding: 18px 15px;
+    vertical-align: middle;
+    font-size: 14px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Ajustar anchos de columnas */
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 5%;
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 20%;
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 35%;
+}
+
+table th:nth-child(4),
+table td:nth-child(4) {
+    width: 20%;
+}
+
+table th:nth-child(5),
+table td:nth-child(5) {
+    width: 20%;
+    text-align: center;
+}
+
+/* Botones de iconos (editar/eliminar) */
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #6c757d;
+    background: white;
+    cursor: pointer;
+    margin: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.1);
+}
+
+/* Botón de reproducir audio */
+.btn-play {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.btn-play:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* Paginación */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.btn-pagination {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-pagination:hover:not(:disabled) {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.btn-pagination:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.page-info {
+    font-weight: 500;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Contenedor del formulario */
+.form-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container form {
+    max-width: 600px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 35px;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Etiquetas del formulario */
+.form-label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 15px;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-size: 13px;
+    display: block;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+/* Campos del formulario */
+.form-control {
+    border: 1px solid #dee2e6;
+    padding: 12px 8px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    width: 100%;
+}
+
+.form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* Botón guardar */
+.btn-guardar {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-guardar:hover {
+    background-color: #1d4ed8;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Botón cancelar */
+.btn-cancelar {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-cancelar:hover {
+    background-color: #5a6268;
+}
+
+/* Input de audio */
+.audio-input {
+    width: 100%;
+    padding: 10px;
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .main-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    /* Header responsive */
+    .header-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .search-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .logo {
+        height: 40px;
+    }
+
+    .btn-crear {
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    /* Tabla responsive - ocultar columnas menos importantes */
+    .table-wrapper {
+        max-height: 300px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    table th,
+    table td {
+        padding: 10px 5px;
+    }
+
+    /* Ocultar columna de ID en móvil */
+    table th:nth-child(1),
+    table td:nth-child(1) {
+        display: none;
+    }
+
+    /* Ajustar anchos en móvil */
+    table th:nth-child(2),
+    table td:nth-child(2) {
+        width: 25%;
+        font-size: 11px;
+    }
+
+    table th:nth-child(3),
+    table td:nth-child(3) {
+        width: 35%;
+        font-size: 11px;
+    }
+
+    table th:nth-child(4),
+    table td:nth-child(4) {
+        width: 20%;
+        font-size: 10px;
+    }
+
+    table th:nth-child(5),
+    table td:nth-child(5) {
+        width: 20%;
+    }
+
+    /* Botones más pequeños en móvil */
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        margin: 0 3px;
+        font-size: 14px;
+    }
+
+    .btn-play {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    /* Paginación responsive */
+    .pagination-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn-pagination {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+
+    .page-info {
+        font-size: 14px;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Formulario responsive */
+    .form-container {
+        padding: 20px;
+    }
+
+    .form-control {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .btn-guardar,
+    .btn-cancelar {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    /* Modal responsive */
+    .modal-dialog {
+        margin: 10px;
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+
+    .modal-header {
+        padding: 15px;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+
+    .btn-cerrar-audio {
+        padding: 6px 15px;
+        font-size: 13px;
+    }
+}
+
+/* Para pantallas muy pequeñas (menos de 400px) */
+@media (max-width: 400px) {
+    .logo {
+        height: 80px;
+    }
+
+    table {
+        font-size: 10px;
+    }
+
+    table th,
+    table td {
+        padding: 8px 3px;
+    }
+
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .btn-play {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+}
+
+/* Asegurar que el modal esté oculto por defecto */
+#audioModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#audioModal.show {
+    display: block !important;
+}
+
+#audioContent {
+    max-width: 500px;
+    width: 90%;
+    padding: 35px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    text-align: center;
+    position: relative;
+    pointer-events: auto;
+}
+
+.modal-backdrop {
+    display: none;
+}
+
+.modal-backdrop.show {
+    display: block;
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+/* Botón cerrar/ocultar audio */
+.btn-cerrar-audio {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-cerrar-audio:hover {
+    background-color: #f97316;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Contenedor de botones de control de audio */
+.audio-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+/* Botón pausar */
+.btn-pausar-audio {
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.btn-pausar-audio:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+/* Botón reanudar */
+.btn-reanudar-audio {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.btn-reanudar-audio:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Botón detener */
+.btn-detener-audio {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.btn-detener-audio:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
