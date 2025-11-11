@@ -51,7 +51,8 @@
   
   <!-- Formulario -->
   <div class="form-container" id="formulario" style="display: none;">
-    <form onsubmit="guardarPlantilla(event)">
+    <form id="formPlantilla" onsubmit="guardarPlantilla(event)" enctype="multipart/form-data">
+      <input type="hidden" id="plantillaId" name="id">
       <div class="mb-3">
         <label class="form-label">Nombre de la plantilla</label>
         <input type="text" class="form-control" id="nombrePlantilla" required>

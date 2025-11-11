@@ -1,33 +1,40 @@
-// Datos iniciales
-let plantillas = [
-    {
-        id: 1,
-        nombre: 'Plantilla Bienvenida',
-        contenido: 'Hola, bienvenido a nuestro servicio',
-        audio: 'bienvenida.mp3',
-        audioData: null
-    },
-    {
-        id: 2,
-        nombre: 'Plantilla Seguimiento',
-        contenido: 'Gracias por tu compra, te contactaremos pronto',
-        audio: 'seguimiento.mp3',
-        audioData: null
-    },
-    {
-        id: 3,
-        nombre: 'Plantilla Recordatorio',
-        contenido: 'Recordatorio: tienes una cita pendiente',
-        audio: 'Sin audio',
-        audioData: null
-    }
-];
+// URL base de los endpoints
+const API_BASE = 'https://plantillas.maplascali.net/back';
 
-let idCounter = 4;
+// Variables globales
+let plantillas = [];
+let idCounter = 1;
 let paginaActual = 1;
 const registrosPorPagina = 10;
+let plantillaEditandoId = null;
 
-// Validar que solo se suban archivos MP3
+// Cargar plantillas desde el servidor al iniciar
+async function cargarPlantillas() {
+    try {
+        const response = await fetch(`${API_BASE}/list_plantillas.php`);
+        const data = await response.json();
+        
+        if (data.status === 'ok' && data.data) {
+            // Mapear los datos al formato que necesitamos
+            plantillas = data.data.map(p => ({
+                id: parseInt(p.id),
+                nombre: p.nombre,
+                contenido: p.contenido,
+                audio_url: p.audio ? `https://plantillas.maplascali.net/${p.audio}` : null,
+                fecha: p.fecha
+            }));
+            actualizarTabla();
+        } else {
+            console.error('Error al cargar plantillas:', data.message || 'Error desconocido');
+            alert('No se pudieron cargar las plantillas');
+        }
+    } catch (error) {
+        console.error('Error de conexión:', error);
+        alert('Error al cargar las plantillas. Verifica tu conexión.');
+    }
+}
+
+// Validar que solo se suban archivos MP3, WAV u OGG
 function validarAudio(input) {
     const archivo = input.files[0];
     if (archivo) {
@@ -48,56 +55,91 @@ function validarAudio(input) {
 
 // Mostrar el formulario
 function mostrarFormulario() {
+    plantillaEditandoId = null;
+    document.getElementById('plantillaId').value = '';
+    document.getElementById('nombrePlantilla').value = '';
+    document.getElementById('contenido').value = '';
+    document.getElementById('audio').value = '';
+    document.getElementById('audio').required = true;
     document.getElementById('formulario').style.display = 'flex';
 }
 
 // Cerrar el formulario
 function cerrarFormulario() {
+    plantillaEditandoId = null;
+    document.getElementById('plantillaId').value = '';
     document.getElementById('nombrePlantilla').value = '';
     document.getElementById('contenido').value = '';
     document.getElementById('audio').value = '';
     document.getElementById('formulario').style.display = 'none';
 }
 
-// Guardar una nueva plantilla
-function guardarPlantilla(event) {
+// Cerrar formulario si hace clic fuera
+function cerrarSiClickFuera(event) {
+    if (event.target.id === 'formulario') {
+        cerrarFormulario();
+    }
+}
+
+// Guardar o actualizar una plantilla
+// Guardar o actualizar una plantilla
+async function guardarPlantilla(event) {
     event.preventDefault();
     
+    const formData = new FormData();
     const nombre = document.getElementById('nombrePlantilla').value;
     const contenido = document.getElementById('contenido').value;
     const audioFile = document.getElementById('audio').files[0];
     
-    let audioData = null;
-    let audioNombre = 'Sin audio';
+    formData.append('nombre', nombre);
+    formData.append('contenido', contenido);
     
-    if (audioFile) {
-        audioNombre = audioFile.name;
-        audioData = URL.createObjectURL(audioFile);
+    let url = `${API_BASE}/create_plantillas.php`;
+    
+    // Si estamos editando
+    if (plantillaEditandoId) {
+        url = `${API_BASE}/edit_plantillas.php`;
+        formData.append('id', plantillaEditandoId);
     }
     
-    const plantilla = {
-        id: idCounter++,
-        nombre: nombre,
-        contenido: contenido,
-        audio: audioNombre,
-        audioData: audioData
-    };
+    // Solo agregar audio si se seleccionó uno
+    if (audioFile) {
+        formData.append('audio', audioFile);
+    } else if (!plantillaEditandoId) {
+        alert('⚠️ Debes seleccionar un archivo de audio');
+        return;
+    }
     
-    plantillas.push(plantilla);
-    cerrarFormulario();
-    
-    // Ir a la última página
-    paginaActual = Math.ceil(plantillas.length / registrosPorPagina);
-    actualizarTabla();
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        // Cambiar aquí: verificar data.status en lugar de data.success
+        if (data.status === 'ok') {
+            alert(plantillaEditandoId ? '✅ Plantilla actualizada correctamente' : '✅ Plantilla creada correctamente');
+            cerrarFormulario();
+            await cargarPlantillas();
+            paginaActual = 1;
+        } else {
+            alert('❌ Error: ' + (data.message || 'Error desconocido'));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error al guardar la plantilla');
+    }
 }
 
 // Reproducir audio
 function reproducirAudio(id) {
     const plantilla = plantillas.find(p => p.id === id);
-    if (plantilla && plantilla.audioData) {
+    if (plantilla && plantilla.audio_url) {
         const audioPlayer = document.getElementById('audioPlayer');
         const modal = document.getElementById('audioModal');
-        audioPlayer.src = plantilla.audioData;
+        audioPlayer.src = plantilla.audio_url;
         modal.style.display = 'flex';
         audioPlayer.play();
     } else {
@@ -110,6 +152,7 @@ function cerrarAudio() {
     const audioPlayer = document.getElementById('audioPlayer');
     const modal = document.getElementById('audioModal');
     audioPlayer.pause();
+    audioPlayer.currentTime = 0;
     audioPlayer.src = '';
     modal.style.display = 'none';
 }
@@ -157,9 +200,9 @@ function actualizarTabla() {
     plantillasPagina.forEach(plantilla => {
         const tr = document.createElement('tr');
         
-        const audioCell = plantilla.audioData 
+        const audioCell = plantilla.audio_url 
             ? `<button class="btn-play" onclick="reproducirAudio(${plantilla.id})">▶ Reproducir</button>`
-            : plantilla.audio;
+            : 'Sin audio';
         
         tr.innerHTML = `
             <td>${plantilla.id}</td>
@@ -201,29 +244,51 @@ function cambiarPagina(direccion) {
 function editarPlantilla(id) {
     const plantilla = plantillas.find(p => p.id === id);
     if (plantilla) {
+        plantillaEditandoId = id;
+        document.getElementById('plantillaId').value = id;
         document.getElementById('nombrePlantilla').value = plantilla.nombre;
         document.getElementById('contenido').value = plantilla.contenido;
-        mostrarFormulario();
+        document.getElementById('audio').required = false; // Audio opcional al editar
+        document.getElementById('formulario').style.display = 'flex';
     }
 }
 
 // Eliminar una plantilla
-function eliminarPlantilla(id) {
-    if (confirm('¿Estás seguro de eliminar esta plantilla?')) {
-        plantillas = plantillas.filter(p => p.id !== id);
+// Eliminar una plantilla
+async function eliminarPlantilla(id) {
+    if (!confirm('¿Estás seguro de eliminar esta plantilla?')) {
+        return;
+    }
+    
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
         
-        // Ajustar página si es necesario
-        const totalPaginas = Math.ceil(plantillas.length / registrosPorPagina);
-        if (paginaActual > totalPaginas && paginaActual > 1) {
-            paginaActual--;
+        const response = await fetch(`${API_BASE}/delete_plantillas.php`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        // Cambiar aquí: verificar data.status en lugar de data.success
+        if (data.status === 'ok') {
+            alert('✅ Plantilla eliminada correctamente');
+            await cargarPlantillas();
+            
+            // Ajustar página si es necesario
+            const totalPaginas = Math.ceil(plantillas.length / registrosPorPagina);
+            if (paginaActual > totalPaginas && paginaActual > 1) {
+                paginaActual--;
+            }
+        } else {
+            alert('❌ Error: ' + (data.message || 'Error desconocido'));
         }
-        
-        actualizarTabla();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error al eliminar la plantilla');
     }
 }
-
-// Cargar plantillas al iniciar la página
-actualizarTabla();
 
 // Buscar plantillas
 function buscarPlantilla() {
@@ -243,3 +308,8 @@ function buscarPlantilla() {
         }
     }
 }
+
+// Cargar plantillas al iniciar la página
+window.addEventListener('DOMContentLoaded', () => {
+    cargarPlantillas();
+});
