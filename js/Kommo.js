@@ -20,7 +20,7 @@ async function cargarPlantillas() {
                 id: parseInt(p.id),
                 nombre: p.nombre,
                 contenido: p.contenido,
-                audio_url: p.audio ? `https://plantillas.maplascali.net/${p.audio}` : null,
+                audio_url: p.audio ? `https://plantillas.maplascali.net/back/${p.audio}` : null,
                 fecha: p.fecha
             }));
             actualizarTabla();
