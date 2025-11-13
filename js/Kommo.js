@@ -60,7 +60,7 @@ function mostrarFormulario() {
     document.getElementById('nombrePlantilla').value = '';
     document.getElementById('contenido').value = '';
     document.getElementById('audio').value = '';
-    document.getElementById('audio').required = true;
+    // document.getElementById('audio').required = true;
     document.getElementById('formulario').style.display = 'flex';
 }
 
@@ -81,7 +81,6 @@ function cerrarSiClickFuera(event) {
     }
 }
 
-// Guardar o actualizar una plantilla
 // Guardar o actualizar una plantilla
 async function guardarPlantilla(event) {
     event.preventDefault();
@@ -105,10 +104,10 @@ async function guardarPlantilla(event) {
     // Solo agregar audio si se seleccionó uno
     if (audioFile) {
         formData.append('audio', audioFile);
-    } else if (!plantillaEditandoId) {
-        alert('⚠️ Debes seleccionar un archivo de audio');
-        return;
-    }
+    }// else if (!plantillaEditandoId) {
+    //     alert('⚠️ Debes seleccionar un archivo de audio');
+    //     return;
+    // }
     
     try {
         const response = await fetch(url, {
@@ -248,7 +247,7 @@ function editarPlantilla(id) {
         document.getElementById('plantillaId').value = id;
         document.getElementById('nombrePlantilla').value = plantilla.nombre;
         document.getElementById('contenido').value = plantilla.contenido;
-        document.getElementById('audio').required = false; // Audio opcional al editar
+        //document.getElementById('audio').required = false; // Audio opcional al editar
         document.getElementById('formulario').style.display = 'flex';
     }
 }
